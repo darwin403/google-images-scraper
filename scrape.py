@@ -211,7 +211,11 @@ if __name__ == "__main__":
     keywords = [i.split(',')
                 for i in open('keywords.txt') if len(list(filter(None, i.split(',')))) == 2]
 
-    for (keyword, category) in keywords:
+    for (keyword_raw, category_raw) in keywords:
+        # format input
+        keyword = keyword_raw.strip().lower()
+        category = category_raw.strip().lower()
+
         logging.info("[keyword]: started '%s' under '%s'" %
                      (keyword, category))
 
@@ -238,7 +242,7 @@ if __name__ == "__main__":
             with open(meta_path, 'w+') as h:
                 json.dump(images, h)
 
-        logging.info('[images] loaded: %s' % len(images))
+        logging.info('[images] found: %s' % len(images))
 
         good_images = 0
 

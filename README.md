@@ -37,8 +37,8 @@ The following python dependencies are used:
 
 1. `selenium` - For opening a headless browser session to collect the images.
 2. `webdriver_manager` - For automatically installing and managing selenium headless browsers.
-3. `bs4` - For parsing HTML schema.
-4. `google` - For using Google Vision API servies.
+3. `beautifulsoup4` - For parsing HTML schema.
+4. `google-cloud-vision` - For using Google Vision API servies.
 5. `coloredlogs` - For displaying styled logging to terminal.
 
 # Features
