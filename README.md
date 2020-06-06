@@ -21,7 +21,7 @@ pip3 install -r requirements.txt
 
 You will need to create a Google Vision API key as shown in this [tutorial](https://cloud.google.com/vision/docs/setup). Download the API `.json` file so obtained and save it in the project folder as `google_api_key.json`
 
-Modify the default `keywords.txt` to the ones that you wish to scrape.
+Modify the default `keywords.txt` to include the searches that you wish to scrape. One search should be written in one line. Each search must be of the format `keyword, category` eg. `avengers, movie`
 
 Finally, start the scrapping by running:
 
@@ -29,7 +29,7 @@ Finally, start the scrapping by running:
 python3 scrape.py
 ```
 
-You will see a progress on your terminal. The thumbnails are saved to `tmp/mycategory/mykeyword` and the original images that do not contain any text are saved to `dumps/mycategory/mykeyword`
+You will see a progress on your terminal. The thumbnails are saved to `tmp/category/keyword` and the original images that do not contain any text are saved to `dumps/category/keyword`
 
 # Dependencies
 

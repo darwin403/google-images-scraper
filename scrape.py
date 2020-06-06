@@ -35,7 +35,8 @@ if not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(
             PROJECT_ROOT / 'google_api_key.json')
     except Exception as e:
-        logging.critical('[vision]: no google_api_key.json found. message: %s' % e)
+        logging.critical(
+            '[vision]: no google_api_key.json found. message: %s' % e)
 
 
 def find_images(keyword, category):
@@ -49,10 +50,8 @@ def find_images(keyword, category):
         list: A list of tuples. Wherein for each tuple, the first element is an image's thumbnail and the second element is an image's original url.
     """
 
-    # url = 'https://www.google.com/search?as_st=y&tbm=isch&hl=en&as_q=&as_epq=%s,%s&as_oq=&as_eq=meme&cr=&as_sitesearch=&safe=images&tbs=itp:animated,iar:xw' % (
-    #     urllib.parse.quote_plus(keyword), urllib.parse.quote_plus(category))
-    url = 'https://www.google.com/search?as_st=y&tbm=isch&hl=en&as_q=&as_epq=%s&as_oq=&as_eq=2077&cr=&as_sitesearch=&tbs=itp:animated' % (
-        urllib.parse.quote_plus(keyword))
+    url = 'https://www.google.com/search?as_st=y&tbm=isch&hl=en&as_q=&as_epq=%s,%s&as_oq=&as_eq=meme&cr=&as_sitesearch=&safe=images&tbs=itp:animated,iar:xw' % (
+        urllib.parse.quote_plus(keyword), urllib.parse.quote_plus(category))
 
     options = webdriver.ChromeOptions()
     options.add_argument('--no-sandbox')
@@ -68,7 +67,7 @@ def find_images(keyword, category):
     logging.info('[chrome] webpage: opened %s' % url)
 
     # scroll down to load all images
-    scroll = True
+    scroll = False
     height = browser.execute_script("return document.body.scrollHeight")
     while scroll:
         browser.execute_script(
@@ -208,17 +207,17 @@ def download_image(url, loc):
 if __name__ == "__main__":
     logging.info('bot started.')
 
-    # specify keywords and category to look for
-    CATEGORY = "cyberpunk"
-    keywords = [i.strip().lower() for i in open('keywords.txt') if i.strip()]
+    # load the keywords and category to look for
+    keywords = [i.split(',')
+                for i in open('keywords.txt') if len(list(filter(None, i.split(',')))) == 2]
 
-    for keyword in keywords:
+    for (keyword, category) in keywords:
         logging.info("[keyword]: started '%s' under '%s'" %
-                     (keyword, CATEGORY))
+                     (keyword, category))
 
         # define paths
         keyword_slug = re.sub(' +', '_', keyword)
-        category_slug = re.sub(' +', '_', CATEGORY)
+        category_slug = re.sub(' +', '_', category)
         meta_path = SAVE_ROOT / 'tmp' / \
             category_slug / ('%s.json' % keyword_slug)
         tmp_path = SAVE_ROOT / 'tmp' / category_slug / keyword_slug
@@ -235,7 +234,7 @@ if __name__ == "__main__":
             images = json.load(open(meta_path))
         else:
             # open selenium and get images
-            images = find_images(keyword, CATEGORY)
+            images = find_images(keyword, category)
             with open(meta_path, 'w+') as h:
                 json.dump(images, h)
 
